@@ -51,6 +51,12 @@ function M.create_note(title, template, path, vars)
   local file_name = M._slugify(title)
   local file_path = path .. "/" .. file_name .. ".md"
 
+  local file_exists = io.open(file_path, "r")
+  if file_exists then
+    file_exists:close()
+    return file_path
+  end
+
   local file = io.open(file_path, "w")
   if not file then
     error("Could not create note at: " .. file_path)
