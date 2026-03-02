@@ -61,4 +61,31 @@ function M.resolve_link(link, vault_root)
   }
 end
 
+--- Find all notes in the vault that contain a wiki-link to the given target slug.
+--- Matches [[target]] and [[target#anchor]] patterns.
+---@param target string the slug to search for (no .md extension, relative to vault root)
+---@param vault_root string the root directory of the vault
+---@return table list of file paths that contain a link to the target
+function M.find_backlinks(target, vault_root)
+  assert(type(target) == "string", "target must be a string")
+  assert(type(vault_root) == "string", "vault_root must be a string")
+  assert(not target:match("%.md$"), "target should not include .md extension")
+
+  local vault = require("core.vault")
+  local results = {}
+  local pattern = "%[%[" .. target:gsub("%-", "%%-") .. "[%]#]"
+
+  for _, path in ipairs(vault.list_notes(vault_root)) do
+    local f = io.open(path, "r")
+    if f then
+      local content = f:read("*a")
+      f:close()
+      if content:find(pattern) then
+        table.insert(results, path)
+      end
+    end
+  end
+  return results
+end
+
 return M

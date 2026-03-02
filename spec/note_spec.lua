@@ -37,6 +37,11 @@ describe("render_template", function()
       note._render_template(template, {})
     end)
   end)
+
+  it("allows empty string as a variable value", function()
+    local result = note._render_template("Hello {{name}}", { name = "" })
+    assert.are.equal("Hello ", result)
+  end)
 end)
 
 describe("validate_note_params", function()
@@ -68,11 +73,12 @@ describe("create_note", function()
     local expected_path = temp_dir .. "/my-note.md"
 
     -- act
-    local actual_path = note.create_note("My Note", "This is the content of the note.", temp_dir, {})
+    local actual_path, created = note.create_note("My Note", "This is the content of the note.", temp_dir, {})
 
     -- assert
     assert.is_not_nil(actual_path)
     assert.is_true(expected_path == actual_path)
+    assert.is_true(created)
     local content = spec_utils.read_file(actual_path)
     assert.are.equal("This is the content of the note.", content)
   end)
@@ -82,11 +88,12 @@ describe("create_note", function()
     local expected_path = temp_dir .. "/my-var-note.md"
 
     -- act
-    local actual_path = note.create_note("My Var??? Note", "Hello {{name}}, today is {{date}}!", temp_dir, { name = "World", date = os.date("%Y-%m-%d") })
+    local actual_path, created = note.create_note("My Var??? Note", "Hello {{name}}, today is {{date}}!", temp_dir, { name = "World", date = os.date("%Y-%m-%d") })
 
     -- assert
     assert.is_not_nil(actual_path)
     assert.is_true(expected_path == actual_path)
+    assert.is_true(created)
     local content = spec_utils.read_file(actual_path)
     assert.are.equal("Hello World, today is " .. os.date("%Y-%m-%d") .. "!", content)
   end)
@@ -99,11 +106,12 @@ describe("create_note", function()
     file:close()
 
     -- act
-    local actual_path = note.create_note("Existing Note", "New content", temp_dir, {})
+    local actual_path, created = note.create_note("Existing Note", "New content", temp_dir, {})
 
     -- assert
     assert.is_not_nil(actual_path)
     assert.is_true(path == actual_path)
+    assert.is_false(created)
     local content = spec_utils.read_file(actual_path)
     assert.are.equal("Existing content", content)
   end)

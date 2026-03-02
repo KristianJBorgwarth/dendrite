@@ -85,3 +85,55 @@ describe("resolve_link", function()
   end)
 
 end)
+
+describe("link.find_backlinks", function()
+  local temp_dir = spec_utils.make_tmp_dir()
+
+  before_each(function()
+    local function write(path, content)
+      local f = io.open(path, "w"); f:write(content); f:close()
+    end
+    write(temp_dir .. "/source-a.md", "See also [[target-note]] for details")
+    write(temp_dir .. "/source-b.md", "Reference [[target-note#section-1]] here")
+    write(temp_dir .. "/source-c.md", "No links here at all")
+    write(temp_dir .. "/target-note.md", "This is the target")
+  end)
+
+  it("finds notes that link to the target", function()
+    local results = link.find_backlinks("target-note", temp_dir)
+    assert.are.equal(2, #results)
+  end)
+
+  it("matches links with anchors", function()
+    local results = link.find_backlinks("target-note", temp_dir)
+    local found_b = false
+    for _, p in ipairs(results) do
+      if p:find("source%-b") then found_b = true end
+    end
+    assert.is_true(found_b)
+  end)
+
+  it("does not include the target file itself", function()
+    local results = link.find_backlinks("target-note", temp_dir)
+    for _, p in ipairs(results) do
+      assert.is_false(p:find("target%-note") ~= nil and not p:find("source"))
+    end
+  end)
+
+  it("returns empty table when no backlinks exist", function()
+    local results = link.find_backlinks("orphan-note", temp_dir)
+    assert.are.equal(0, #results)
+  end)
+
+  it("errors if target includes .md extension", function()
+    assert.has_error(function()
+      link.find_backlinks("target-note.md", temp_dir)
+    end)
+  end)
+
+  it("errors if target is not a string", function()
+    assert.has_error(function()
+      link.find_backlinks(123, temp_dir)
+    end)
+  end)
+end)

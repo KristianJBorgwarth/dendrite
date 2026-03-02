@@ -5,7 +5,7 @@ local M = {}
 ---@param vars table key-value pairs. Keys correspond to placeholders in the template, and values are the replacements.
 function M._render_template(template, vars)
   return (template:gsub("{{(.-)}}", function(key)
-    if not vars[key] then
+    if vars[key] == nil then
       error("Missing variable for template: " .. key)
     end
     return vars[key]
@@ -44,6 +44,7 @@ end
 ---@param path string the directory path where the note will be created
 ---@param vars table a collection of variables for template rendering, where keys are variable names and values are their replacements
 ---@return string the file path of the created note
+---@return boolean created true if the note was created, false if it already existed
 function M.create_note(title, template, path, vars)
   M._validate_note_params(title, template, path, vars)
   local note_content = M._render_template(template, vars)
@@ -54,7 +55,7 @@ function M.create_note(title, template, path, vars)
   local file_exists = io.open(file_path, "r")
   if file_exists then
     file_exists:close()
-    return file_path
+    return file_path, false
   end
 
   local file = io.open(file_path, "w")
@@ -65,7 +66,7 @@ function M.create_note(title, template, path, vars)
   file:write(note_content)
   file:close()
 
-  return file_path
+  return file_path, true
 end
 
 return M
