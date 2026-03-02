@@ -1,5 +1,5 @@
-local frontmatter = require("core.frontmatter")
-local vault = require("core.vault")
+local frontmatter = require("dendrite.core.frontmatter")
+local vault = require("dendrite.core.vault")
 
 local M = {}
 

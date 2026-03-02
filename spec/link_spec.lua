@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-field, param-type-mismatch, need-check-nil
-local link = require("core.link")
+local link = require("dendrite.core.link")
 local spec_utils = require("spec.spec_utils")
 
 describe("resolve_link", function()

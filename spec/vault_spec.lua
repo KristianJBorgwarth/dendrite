@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-field, param-type-mismatch, need-check-nil
-local vault = require("core.vault")
+local vault = require("dendrite.core.vault")
 local spec_utils = require("spec.spec_utils")
 
 describe("vault.list_notes", function()

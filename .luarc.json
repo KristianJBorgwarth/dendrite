@@ -1,0 +1,12 @@
+{
+    "diagnostics.globals": [
+        "vim",
+        "version",
+        "source",
+        "description",
+        "dependencies",
+        "build_dependencies",
+        "build",
+        "test_dependencies"
+    ]
+}

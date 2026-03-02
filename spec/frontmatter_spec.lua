@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-field, param-type-mismatch, need-check-nil
-local frontmatter = require("core.frontmatter")
+local frontmatter = require("dendrite.core.frontmatter")
 
 describe("frontmatter.parse", function()
   it("returns nil and full content when no frontmatter present", function()

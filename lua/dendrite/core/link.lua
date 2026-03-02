@@ -71,7 +71,7 @@ function M.find_backlinks(target, vault_root)
   assert(type(vault_root) == "string", "vault_root must be a string")
   assert(not target:match("%.md$"), "target should not include .md extension")
 
-  local vault = require("core.vault")
+  local vault = require("dendrite.core.vault")
   local results = {}
   local pattern = "%[%[" .. target:gsub("%-", "%%-") .. "[%]#]"
 
