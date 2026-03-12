@@ -1,8 +1,8 @@
 package = "dendrite"
-version = "0.1.2-1"
+version = "0.1.3-1"
 source = {
    url = "git+https://github.com/KristianJBorgwarth/dendrite.git",
-   tag = "v0.1.2",
+   tag = "v0.1.3",
 }
 description = {
    summary = "A local, filesystem-based note engine for markdown vaults.",
@@ -20,6 +20,6 @@ build = {
       ["dendrite.core.note"]        = "lua/dendrite/core/note.lua",
       ["dendrite.core.search"]      = "lua/dendrite/core/search.lua",
       ["dendrite.core.vault"]       = "lua/dendrite/core/vault.lua",
-      ["dendrite.core.init"]        = "lua/dendrite/init.lua",
+      ["dendrite.core.init"]        = "lua/dendrite/core/init.lua",
    }
 }
