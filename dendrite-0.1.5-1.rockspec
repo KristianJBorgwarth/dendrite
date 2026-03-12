@@ -1,8 +1,8 @@
 package = "dendrite"
-version = "0.1.4-1"
+version = "0.1.5-1"
 source = {
    url = "git+https://github.com/KristianJBorgwarth/dendrite.git",
-   tag = "v0.1.4",
+   tag = "v0.1.5",
 }
 description = {
    summary = "A local, filesystem-based note engine for markdown vaults.",
